@@ -1,0 +1,591 @@
+<title>Houseboat on the Seine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2ead9;
+    --paper-raised:#fffbf2;
+    --ink:#182129;
+    --slate:#5d6b71;
+    --brass:#9c6f32;
+    --wagon:#2e4a3a;
+    --wagon-tint:rgba(46,74,58,0.1);
+    --brass-tint:rgba(156,111,50,0.12);
+    --line:rgba(24,33,41,0.16);
+    --shadow:rgba(24,33,41,0.14);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#121a21;
+      --paper-raised:#1b252e;
+      --ink:#ece4d4;
+      --slate:#9aa8ae;
+      --brass:#d9a456;
+      --wagon:#6b9c82;
+      --wagon-tint:rgba(107,156,130,0.14);
+      --brass-tint:rgba(217,164,86,0.14);
+      --line:rgba(236,228,212,0.16);
+      --shadow:rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#121a21;
+    --paper-raised:#1b252e;
+    --ink:#ece4d4;
+    --slate:#9aa8ae;
+    --brass:#d9a456;
+    --wagon:#6b9c82;
+    --wagon-tint:rgba(107,156,130,0.14);
+    --brass-tint:rgba(217,164,86,0.14);
+    --line:rgba(236,228,212,0.16);
+    --shadow:rgba(0,0,0,0.45);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Work Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Fraunces","Iowan Old Style",serif; font-weight:600; text-wrap:balance; margin:0;}
+  .mono{font-family:"IBM Plex Mono", ui-monospace, monospace;}
+  a{color:inherit;}
+  img{display:block; width:100%; height:100%; object-fit:cover;}
+
+  .wrap{max-width:1040px; margin:0 auto; padding:0 20px;}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative; width:100%; aspect-ratio:16/11; max-height:62vh; overflow:hidden; background:var(--ink);}
+  @media (min-width:700px){ .hero{aspect-ratio:21/9;} }
+  .hero img{filter:saturate(1.03);}
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(0deg, rgba(10,14,18,0.82) 0%, rgba(10,14,18,0.35) 42%, rgba(10,14,18,0.05) 68%);
+  }
+  .hero-text{position:absolute; left:0; right:0; bottom:0; padding:28px 20px 24px; color:#f3ecdd;}
+  .hero-eyebrow{
+    font-family:"IBM Plex Mono"; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:#d9c9a3; margin-bottom:10px; display:block;
+  }
+  .hero h1{font-size:clamp(2rem, 6vw, 3.4rem); line-height:1.02; max-width:14ch;}
+  .hero-sub{font-size:0.95rem; color:#cfc6b2; margin-top:12px; max-width:52ch; line-height:1.5;}
+
+  /* ---------- Ticket / essentials strip ---------- */
+  .ticket{
+    display:grid; grid-template-columns:1fr; gap:0;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    margin:-26px auto 0;
+    max-width:1000px;
+    position:relative;
+    box-shadow:0 10px 30px var(--shadow);
+  }
+  @media (min-width:760px){ .ticket{grid-template-columns:1fr 1fr 1fr;} }
+  .ticket-item{
+    padding:20px 22px;
+    border-bottom:1px dashed var(--line);
+    position:relative;
+  }
+  @media (min-width:760px){
+    .ticket-item{border-bottom:none; border-right:1px dashed var(--line);}
+    .ticket-item:last-child{border-right:none;}
+  }
+  .ticket-item:last-child{border-bottom:none;}
+  .ticket-label{
+    font-family:"IBM Plex Mono"; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--brass); display:block; margin-bottom:8px;
+  }
+  .ticket-main{font-family:"Fraunces"; font-weight:600; font-size:1.05rem; margin-bottom:4px;}
+  .ticket-detail{font-size:0.86rem; color:var(--slate); line-height:1.45;}
+
+  /* ---------- Day nav ---------- */
+  .daynav{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(10px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+    margin-top:36px;
+  }
+  .daynav-inner{display:flex; max-width:1040px; margin:0 auto;}
+  .daynav a{
+    flex:1; text-align:center; padding:14px 8px;
+    font-family:"IBM Plex Mono"; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--slate); text-decoration:none; border-bottom:2px solid transparent;
+  }
+  .daynav a.active{color:var(--ink); border-bottom-color:var(--brass);}
+
+  /* ---------- Day section ---------- */
+  .day{padding:46px 0 10px;}
+  .day-head{margin-bottom:28px;}
+  .day-eyebrow{
+    font-family:"IBM Plex Mono"; font-size:0.74rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--wagon); display:block; margin-bottom:8px;
+  }
+  .day-head h2{font-size:clamp(1.8rem,4.5vw,2.6rem);}
+  .day-line{font-size:0.95rem; color:var(--slate); margin-top:8px; max-width:62ch; line-height:1.55;}
+
+  /* ---------- Stops / timeline ---------- */
+  .stops{position:relative; margin-top:10px;}
+  .stop{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .stops .stop:first-child{border-top:none;}
+  @media (min-width:700px){
+    .stop{grid-template-columns:86px 1fr; gap:22px; padding:26px 0;}
+    .stop.has-image{grid-template-columns:86px 230px 1fr;}
+  }
+  .stop-time{display:flex; flex-direction:row; align-items:baseline; gap:10px;}
+  @media (min-width:700px){ .stop-time{flex-direction:column; gap:2px; align-items:flex-start; padding-top:2px;} }
+  .t-main{font-family:"IBM Plex Mono"; font-weight:600; font-size:0.92rem; color:var(--brass); white-space:nowrap;}
+  .t-24{font-family:"IBM Plex Mono"; font-size:0.72rem; color:var(--slate); opacity:0.8;}
+
+  .stop-photo{
+    aspect-ratio:4/3; overflow:hidden; border:1px solid var(--line); background:var(--paper-raised);
+  }
+  @media (min-width:700px){ .stop-photo{aspect-ratio:auto; height:100%; min-height:150px;} }
+
+  .stop-body h3{font-size:1.18rem; margin-bottom:6px;}
+  .stop-body p{margin:0; font-size:0.96rem; line-height:1.6; color:var(--ink); max-width:60ch;}
+  .stop.minor .stop-body h3{font-size:1.02rem; font-family:"Work Sans"; font-weight:600;}
+  .stop.minor .stop-body p{color:var(--slate); font-size:0.9rem;}
+  .stop.minor{padding:14px 0;}
+
+  .tag{
+    display:inline-block; margin-top:9px; font-family:"IBM Plex Mono"; font-size:0.66rem;
+    letter-spacing:0.08em; text-transform:uppercase; padding:3px 8px;
+    background:var(--wagon-tint); color:var(--wagon); border:1px solid var(--wagon);
+  }
+  .tag.brass{background:var(--brass-tint); color:var(--brass); border-color:var(--brass);}
+
+  .opts{list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:7px; max-width:60ch;}
+  .opts li{font-size:0.9rem; line-height:1.55; color:var(--slate);}
+  .opts li strong{color:var(--ink); font-weight:600;}
+  .note{margin:9px 0 0; font-size:0.82rem; color:var(--slate); font-style:italic;}
+
+  .branch{border:1px dashed var(--line); padding:14px 16px; max-width:62ch;}
+  .branch-label{
+    font-family:"IBM Plex Mono"; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--wagon); display:block; margin-bottom:6px;
+  }
+  .branch p{margin:0; font-size:0.9rem; line-height:1.55; color:var(--slate);}
+
+  .callout{
+    border:1px solid var(--brass); background:var(--brass-tint);
+    padding:16px 18px; margin:4px 0 0;
+  }
+  .callout .t-main{color:var(--brass);}
+  .callout h3{color:var(--brass);}
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:50px; padding:28px 0 50px; border-top:1px solid var(--line);
+  }
+  footer p{font-size:0.78rem; color:var(--slate); line-height:1.6; max-width:70ch;}
+
+  @media (prefers-reduced-motion:no-preference){
+    html{scroll-behavior:smooth;}
+  }
+</style>
+
+<div class="hero">
+  <img src="img/hero.jpg" alt="A houseboat moored along the Seine in Paris" loading="eager">
+  <div class="hero-text wrap">
+    <span class="hero-eyebrow">Fri 16 — Sun 18 October</span>
+    <h1>Paris, in 60&nbsp;hours</h1>
+    <p class="hero-sub">Land 7:30 AM Friday, leave 5:00 PM Sunday out of CDG. Based on a péniche on the Quai des Tuileries, by the Orangerie.</p>
+  </div>
+</div>
+
+<div class="ticket">
+  <div class="ticket-item">
+    <span class="ticket-label">The boat</span>
+    <div class="ticket-main">Quai des Tuileries, 75001</div>
+    <div class="ticket-detail">Péniche moored twenty steps from the Orangerie's Water&nbsp;Lilies. Captain will take bags before official check-in.</div>
+  </div>
+  <div class="ticket-item">
+    <span class="ticket-label">Friday, 19h00</span>
+    <div class="ticket-main">Lou Lou — table booked</div>
+    <div class="ticket-detail">107 Rue de Rivoli, inside the Musée des Arts Décoratifs courtyard. Five minutes from the gangplank.</div>
+  </div>
+  <div class="ticket-item">
+    <span class="ticket-label">Sunday, hard stop</span>
+    <div class="ticket-main">Leave the city NLT 2:00&nbsp;PM</div>
+    <div class="ticket-detail">For a 5:00&nbsp;PM wheels-up at CDG. Sunday is built backward from this.</div>
+  </div>
+</div>
+
+<nav class="daynav">
+  <div class="daynav-inner">
+    <a href="#fri" data-day="fri">Fri 16</a>
+    <a href="#sat" data-day="sat">Sat 17</a>
+    <a href="#sun" data-day="sun">Sun 18</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- FRIDAY -->
+  <section class="day" id="fri">
+    <div class="day-head">
+      <span class="day-eyebrow">16 October — Landing day</span>
+      <h2>Friday</h2>
+      <p class="day-line">1st and 6th arrondissements — Tuileries, Vendôme, Palais-Royal, Saint-Germain, Luxembourg — before Lou Lou at seven.</p>
+    </div>
+    <div class="stops">
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">7:30 AM</span><span class="t-24">07h30</span></div>
+        <div class="stop-body">
+          <h3>Touchdown, CDG</h3>
+          <p>Terminal 2E, most likely. Immigration and bags, then about 45 minutes into the city without traffic.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">9:30 AM</span><span class="t-24">09h30</span></div>
+        <div class="stop-body">
+          <h3>Gangplank down</h3>
+          <p>Drop bags on the péniche. Official check-in may not be ready — the captain will still take the luggage.</p>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">10:00 AM</span><span class="t-24">10h00</span></div>
+        <div class="stop-photo"><img src="img/tuileries.jpg" alt="The octagonal pond in the Jardin des Tuileries, Paris" loading="eager"></div>
+        <div class="stop-body">
+          <h3>Angelina, then the Tuileries</h3>
+          <p>Angelina, 226 Rue de Rivoli — chocolat chaud l'Africain and a croissant. Then the Grand Bassin Octogonal; the Orangerie is twenty steps off if you want the Water Lilies.</p>
+          <span class="tag">Breakfast</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">11:00 AM</span><span class="t-24">11h00</span></div>
+        <div class="stop-photo"><img src="img/palais-royal.jpg" alt="Daniel Buren's striped columns in the Palais-Royal courtyard, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Vendôme to Palais-Royal</h3>
+          <p>Place Vendôme, then Rue Saint-Honoré, then the Palais-Royal arcades — Didier Ludot, Buren's striped columns, a garden most tour groups skip.</p>
+          <span class="tag">Shopping</span>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">1:00 PM</span><span class="t-24">13h00</span></div>
+        <div class="stop-body">
+          <h3>Lunch options</h3>
+          <ul class="opts">
+            <li><strong>Verjus Bar à Vins</strong> — small plates, natural wine, 52 Rue de Richelieu.</li>
+            <li><strong>Kunitoraya</strong> — udon, quick, Rue Villedo.</li>
+            <li><strong>Juveniles</strong> — wine bar, simple bistro plates, Rue de Richelieu.</li>
+          </ul>
+          <p class="note">All a few minutes off Palais-Royal.</p>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">2:30 PM</span><span class="t-24">14h30</span></div>
+        <div class="stop-photo"><img src="img/louvre-court.jpg" alt="The Louvre Pyramid in the Cour Napoléon, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>The Pyramid, then the river</h3>
+          <p>Cour Napoléon, then cross the Pont des Arts to the Left Bank — a lock-bridge until the city cleared them off in 2015, now a place to watch barges go under.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"></div>
+        <div class="stop-body">
+          <div class="branch">
+            <span class="branch-label">Option</span>
+            <p>Louvre, interior. Open to 9:45 PM on Fridays only — the one evening it's not closed at six. A few hours inside, still an easy walk to Lou Lou by seven. Trades the Saint-Germain and Luxembourg stops below.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">3:30 PM</span><span class="t-24">15h30</span></div>
+        <div class="stop-photo"><img src="img/saint-germain.jpg" alt="The Abbey of Saint-Germain-des-Prés, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Saint-Germain-des-Prés</h3>
+          <p>Oldest church in Paris, then bookshops and gallery windows on Rue de Furstemberg and Rue Bonaparte. Flore and Les Deux Magots are both on the square for coffee.</p>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">4:30 PM</span><span class="t-24">16h30</span></div>
+        <div class="stop-photo"><img src="img/luxembourg.jpg" alt="The Jardin du Luxembourg, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Jardin du Luxembourg</h3>
+          <p>Rented chairs around the pond, the Médicis Fountain, kids with sailboats. No fixed plan here.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">6:00 PM</span><span class="t-24">18h00</span></div>
+        <div class="stop-body">
+          <h3>Back to the boat</h3>
+          <p>Via the Musée d'Orsay's clockface and the Pont Royal — about fifteen minutes, river the whole way.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">7:00 PM</span><span class="t-24">19h00</span></div>
+        <div class="stop-body">
+          <h3>Dinner: Lou Lou</h3>
+          <p>107 Rue de Rivoli, inside the Musée des Arts Décoratifs courtyard — five minutes from the gangplank.</p>
+          <span class="tag brass">Reserved</span>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">9:30 PM</span><span class="t-24">21h30</span></div>
+        <div class="stop-body">
+          <h3>Nightcap options</h3>
+          <ul class="opts">
+            <li><strong>Le Fumoir</strong> — cocktail bar by the Louvre colonnade.</li>
+            <li><strong>Harry's New York Bar</strong> — historic, Rue Daunou, short walk.</li>
+            <li><strong>Stay in</strong> — wine on deck.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SATURDAY -->
+  <section class="day" id="sat">
+    <div class="day-head">
+      <span class="day-eyebrow">17 October — The big day</span>
+      <h2>Saturday</h2>
+      <p class="day-line">7th arrondissement in the morning, Marais and the islands midday, Montmartre at night. One metro crossing; the rest on foot.</p>
+    </div>
+    <div class="stops">
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">8:00 AM</span><span class="t-24">08h00</span></div>
+        <div class="stop-photo"><img src="img/eiffel.jpg" alt="The Eiffel Tower seen from the Trocadéro at sunrise" loading="eager"></div>
+        <div class="stop-body">
+          <h3>Eiffel Tower, Trocadéro side</h3>
+          <p>Smallest crowd of the day at this hour. Trocadéro terraces for photos, then down through the gardens to the base.</p>
+          <span class="tag">View</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">9:30 AM</span><span class="t-24">09h30</span></div>
+        <div class="stop-photo"><img src="img/rue-cler.jpg" alt="The market street Rue Cler in the 7th arrondissement, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Rue Cler</h3>
+          <p>Market street in the 7th — cheesemongers, produce stands, coffee. Pedestrian-only.</p>
+          <span class="tag">Market</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">10:30 AM</span><span class="t-24">10h30</span></div>
+        <div class="stop-photo"><img src="img/pont-alexandre.jpg" alt="Pont Alexandre III with Les Invalides in the background, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Pont Alexandre III</h3>
+          <p>Gilt nymphs, Art Nouveau lamps, Les Invalides' gold dome straight ahead. Built for the 1900 World's Fair.</p>
+          <span class="tag">View</span>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">11:15 AM</span><span class="t-24">11h15</span></div>
+        <div class="stop-body">
+          <h3>Line 1, or a cab, to the Marais</h3>
+          <p>The one real crosstown jump of the day — about 20 minutes either way.</p>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">12:00 PM</span><span class="t-24">12h00</span></div>
+        <div class="stop-photo"><img src="img/rosiers.jpg" alt="Rue des Rosiers in Le Marais, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Lunch: L'As du Falafel</h3>
+          <p>Rue des Rosiers, cash only, line moves fast, vegetarian by default. Sacha Finkelsztajn a few doors down if the line's too long.</p>
+          <span class="tag">Lunch</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">1:00 PM</span><span class="t-24">13h00</span></div>
+        <div class="stop-photo"><img src="img/vosges.jpg" alt="Place des Vosges, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Place des Vosges + the Marais</h3>
+          <p>Oldest planned square in Paris, arcaded on all four sides. Boutiques on the way out; Village Saint-Paul for antiques if there's time.</p>
+          <span class="tag">Shopping</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">2:30 PM</span><span class="t-24">14h30</span></div>
+        <div class="stop-photo"><img src="img/ile-saint-louis.jpg" alt="A quay on the Île Saint-Louis, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Île Saint-Louis: Berthillon</h3>
+          <p>Ice cream most of the city gets compared to. Counter service — eat it on the quai.</p>
+          <span class="tag">Treat</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">3:15 PM</span><span class="t-24">15h15</span></div>
+        <div class="stop-photo"><img src="img/notre-dame.jpg" alt="The facade of Notre-Dame de Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Notre-Dame + Île de la Cité</h3>
+          <p>Reopened December 2024, facade newly cleaned. Entry needs a timed slot booked ahead — this is an outside-only stop.</p>
+          <span class="tag">View</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">4:00 PM</span><span class="t-24">16h00</span></div>
+        <div class="stop-photo"><img src="img/montmartre-stairs.jpg" alt="Stairs leading up to the Basilique du Sacré-Cœur in Montmartre, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Up to Montmartre</h3>
+          <p>Metro or cab to Abbesses, then climb — stairs near the funicular, quieter than the main staircase. Place du Tertre for the caricature artists, Rue des Abbesses for the rest.</p>
+          <span class="tag">Wander</span>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">6:30 PM</span><span class="t-24">18h30</span></div>
+        <div class="stop-photo"><img src="img/sacre-coeur-sunset.jpg" alt="Sunset at the Basilique du Sacré-Cœur, Montmartre" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Sunset from Sacré-Cœur</h3>
+          <p>Steps face west, full view over the city. Gets crowded close to sunset.</p>
+          <span class="tag">View</span>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">8:00 PM</span><span class="t-24">20h00</span></div>
+        <div class="stop-body">
+          <h3>Dinner options</h3>
+          <ul class="opts">
+            <li><strong>Candelaria</strong> — mezcal bar behind an unmarked taqueria door, Marais.</li>
+            <li><strong>Le Mary Celeste</strong> — natural wine, oysters and ceviche, corner spot, Marais.</li>
+            <li><strong>Clown Bar</strong> — natural wine bar in a former circus building, near République.</li>
+          </ul>
+          <p class="note">Reservations recommended for any of these on a Saturday.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">10:30 PM</span><span class="t-24">22h30</span></div>
+        <div class="stop-body">
+          <h3>Walk the river back</h3>
+          <p>Quai-side the whole way if your feet hold out, a cab if they don't.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SUNDAY -->
+  <section class="day" id="sun">
+    <div class="day-head">
+      <span class="day-eyebrow">18 October — The short one</span>
+      <h2>Sunday</h2>
+      <p class="day-line">Half a day. Out of the city no later than 2:00&nbsp;PM for a 5:00&nbsp;PM flight out of CDG.</p>
+    </div>
+    <div class="stops">
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">8:30 AM</span><span class="t-24">08h30</span></div>
+        <div class="stop-photo"><img src="img/louvre-pyramid-inside.jpg" alt="Looking out through the Louvre Pyramid's glass toward the museum facade" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Breakfast options</h3>
+          <ul class="opts">
+            <li><strong>Café Marly</strong> — terrace overlooking the Pyramid, Louvre side.</li>
+            <li><strong>Boulangerie run</strong> — pastries to go, no sit-down needed.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="stop has-image">
+        <div class="stop-time"><span class="t-main">9:30 AM</span><span class="t-24">09h30</span></div>
+        <div class="stop-photo"><img src="img/bouquinistes.jpg" alt="Bouquiniste book stalls along the Quai de Montebello, Paris" loading="lazy"></div>
+        <div class="stop-body">
+          <h3>Bouquinistes on the Quai Voltaire</h3>
+          <p>Cross the Pont Royal, browse the green boxes — licensed as bookstalls since the 1850s. Prints and secondhand books, easy to pack flat.</p>
+          <span class="tag">Wander</span>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">11:00 AM</span><span class="t-24">11h00</span></div>
+        <div class="stop-body">
+          <h3>Last lunch, somewhere easy</h3>
+          <p>Stay on this side of the river — Rue du Bac or Saint-Germain. No reservation needed.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">12:45 PM</span><span class="t-24">12h45</span></div>
+        <div class="stop-body">
+          <h3>Pack up, check out</h3>
+          <p>Back to the péniche. Bags down the gangplank by 1:15.</p>
+        </div>
+      </div>
+
+      <div class="stop callout">
+        <div class="stop-time"><span class="t-main">1:30 PM</span><span class="t-24">13h30</span></div>
+        <div class="stop-body">
+          <h3>Leave the city</h3>
+          <p>Car to CDG. Hard stop: wheels rolling no later than 2:00&nbsp;PM — buffer, not deadline.</p>
+          <span class="tag brass">NLT 14h00</span>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">~2:30 PM</span><span class="t-24">14h30</span></div>
+        <div class="stop-body">
+          <h3>Arrive CDG</h3>
+          <p>45–60 minutes depending on the Périphérique. About two and a half hours before the flight — time for security, not for duty-free.</p>
+        </div>
+      </div>
+
+      <div class="stop minor">
+        <div class="stop-time"><span class="t-main">5:00 PM</span><span class="t-24">17h00</span></div>
+        <div class="stop-body">
+          <h3>Wheels up</h3>
+          <p>Out of CDG.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>Photos via Wikimedia Commons (CC BY-SA / public domain). Confirm hours and reservations the week of.</p>
+  </footer>
+
+</main>
+
+<script>
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.daynav a'));
+    var sections = links.map(function(l){ return document.getElementById(l.getAttribute('data-day')); });
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          var id = entry.target.id;
+          links.forEach(function(l){
+            l.classList.toggle('active', l.getAttribute('data-day') === id);
+          });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(function(s){ if (s) io.observe(s); });
+  })();
+</script>
